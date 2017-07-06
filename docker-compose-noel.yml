@@ -1,0 +1,27 @@
+version: "3"
+services:
+    logstash:
+        image: my-logstash
+        ports:
+            - "9600:9600"
+        networks:
+            - webnet
+    kibana:
+        image: my-kibana
+        ports:
+            - "5601:5601"
+        networks:
+            - webnet
+    visualizer:
+        image: dockersamples/visualizer:stable
+        ports:
+            - "8080:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - webnet
+networks:
+    webnet:
